@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="it" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KartLink - Connetti Piloti, Sponsor e Team di Karting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        racing: {
+                            red: '#FF1801',
+                            redhover: '#E01400',
+                            dark: '#0B0D12',
+                            card: '#141721',
+                            border: '#242A38',
+                            gold: '#FFB800',
+                            accent: '#FF3B00'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        racing: ['Teko', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Modern Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0D12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #242A38;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF1801;
+        }
+
+        .carbon-bg {
+            background-color: #0b0d12;
+            background-image: radial-gradient(#1e2430 0.75px, transparent 0.75px), radial-gradient(#1e2430 0.75px, #0b0d12 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(11,13,18,0.3) 0%, rgba(11,13,18,0.95) 85%, rgba(11,13,18,1) 100%);
+        }
+
+        .glow-red {
+            box-shadow: 0 0 25px -5px rgba(255, 24, 1, 0.4);
+        }
+        
+        .glow-card:hover {
+            box-shadow: 0 10px 30px -10px rgba(255, 24, 1, 0.25);
+            border-color: rgba(255, 24, 1, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-racing-dark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-racing-red selection:text-white carbon-bg">
+
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-racing-dark/90 border-b border-racing-border transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchPage('home')">
+                    <div class="w-10 h-10 bg-racing-red rounded-lg flex items-center justify-center transform -skew-x-12 shadow-lg shadow-racing-red/40">
+                        <i class="fa-solid fa-flag-checkered text-white text-xl transform skew-x-12"></i>
+                    </div>
+                    <span class="font-racing text-3xl font-bold tracking-wider text-white uppercase italic">
+                        KART<span class="text-racing-red">LINK</span>
+                    </span>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <button onclick="switchPage('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-racing-red bg-racing-card border border-racing-border">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </button>
+                    <button onclick="switchPage('drivers')" id="nav-drivers" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-racing-card/60">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span>Piloti Zone</span>
+                    </button>
+                    <button onclick="switchPage('sponsors')" id="nav-sponsors" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-racing-card/60">
+                        <i class="fa-solid fa-handshake"></i>
+                        <span>Sponsor Hub</span>
+                    </button>
+                    <button onclick="switchPage('teams')" id="nav-teams" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-racing-card/60">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Team Finder</span>
+                    </button>
+                    <button onclick="switchPage('chat')" id="nav-chat" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-racing-card/60 relative">
+                        <i class="fa-solid fa-comments"></i>
+                        <span>Messaggi</span>
+                        <span id="chat-unread-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 bg-racing-red rounded-full animate-pulse"></span>
+                    </button>
+                </nav>
+
+                <!-- Action CTA -->
+                <div class="hidden md:flex items-center space-x-3">
+                    <button id="admin-toggle-btn" onclick="openAdminModal()" class="px-3.5 py-2.5 rounded-lg bg-racing-dark border border-racing-border hover:border-racing-red text-slate-300 hover:text-white font-semibold text-xs transition-all flex items-center space-x-2">
+                        <i id="admin-icon" class="fa-solid fa-lock text-racing-red"></i>
+                        <span id="admin-status-text">Area Admin</span>
+                    </button>
+                    <button onclick="openRegistrationModal()" class="px-5 py-2.5 rounded-lg bg-racing-red hover:bg-racing-redhover text-white font-semibold text-sm transition-all duration-200 transform hover:-translate-y-0.5 shadow-lg shadow-racing-red/30 flex items-center space-x-2">
+                        <i class="fa-solid fa-plus-circle"></i>
+                        <span>Crea Profilo</span>
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-racing-card focus:outline-none">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-racing-card/95 backdrop-blur-2xl border-b border-racing-border px-4 pt-2 pb-6 space-y-2">
+            <button onclick="switchPage('home')" class="w-full text-left px-4 py-3 rounded-lg font-medium text-slate-200 hover:bg-racing-dark flex items-center space-x-3">
+                <i class="fa-solid fa-house text-racing-red w-5"></i><span>Home</span>
+            </button>
+            <button onclick="switchPage('drivers')" class="w-full text-left px-4 py-3 rounded-lg font-medium text-slate-200 hover:bg-racing-dark flex items-center space-x-3">
+                <i class="fa-solid fa-id-card text-racing-red w-5"></i><span>Piloti Zone</span>
+            </button>
+            <button onclick="switchPage('sponsors')" class="w-full text-left px-4 py-3 rounded-lg font-medium text-slate-200 hover:bg-racing-dark flex items-center space-x-3">
+                <i class="fa-solid fa-handshake text-racing-red w-5"></i><span>Sponsor Hub</span>
+            </button>
+            <button onclick="switchPage('teams')" class="w-full text-left px-4 py-3 rounded-lg font-medium text-slate-200 hover:bg-racing-dark flex items-center space-x-3">
+                <i class="fa-solid fa-users-gear text-racing-red w-5"></i><span>Team Finder</span>
+            </button>
+            <button onclick="switchPage('chat')" class="w-full text-left px-4 py-3 rounded-lg font-medium text-slate-200 hover:bg-racing-dark flex items-center space-x-3">
+                <i class="fa-solid fa-comments text-racing-red w-5"></i><span>Messaggi / Chat</span>
+            </button>
+            <button onclick="openAdminModal()" class="w-full text-left px-4 py-3 rounded-lg font-medium text-slate-200 hover:bg-racing-dark flex items-center space-x-3 border-t border-racing-border/50">
+                <i id="mobile-admin-icon" class="fa-solid fa-lock text-racing-red w-5"></i><span id="mobile-admin-text">Area Admin (Accedi)</span>
+            </button>
+            <div class="pt-2">
+                <button onclick="openRegistrationModal()" class="w-full py-3 rounded-lg bg-racing-red hover:bg-racing-redhover text-white font-semibold flex items-center justify-center space-x-2 shadow-lg shadow-racing-red/30">
+                    <i class="fa-solid fa-plus-circle"></i><span>Unisciti alla Piattaforma</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Pages -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Home Page -->
+        <div id="page-home" class="page-content space-y-12">
+            <!-- Hero Section -->
+            <div class="relative rounded-3xl overflow-hidden border border-racing-border bg-gradient-to-br from-racing-card via-racing-dark to-racing-card p-8 sm:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+                <div class="max-w-2xl space-y-4">
+                    <span class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-racing-red/10 border border-racing-red/30 text-racing-red text-xs font-semibold">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Piattaforma Motorsport Karting</span>
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                        Connetti <span class="text-racing-red">Piloti</span>, <span class="text-racing-gold">Sponsor</span> e <span class="text-slate-300">Team</span>
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        KartLink è il punto di incontro per chiunque viva il karting agonistico: dai piloti emergenti in cerca di supporto alle scuderie e sponsor in cerca di talenti.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-4 pt-2 justify-center md:justify-start">
+                        <button onclick="openRegistrationModal('driver')" class="px-6 py-3 rounded-xl bg-racing-red hover:bg-racing-redhover text-white font-bold text-sm shadow-lg shadow-racing-red/30 transition-all transform hover:-translate-y-0.5 flex items-center space-x-2">
+                            <i class="fa-solid fa-plus-circle"></i>
+                            <span>Crea Profilo Ora</span>
+                        </button>
+                        <button onclick="switchPage('drivers')" class="px-6 py-3 rounded-xl bg-racing-card border border-racing-border hover:border-racing-red text-slate-200 font-semibold text-sm transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-compass"></i>
+                            <span>Esplora Piloti</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="w-full md:w-auto grid grid-cols-3 gap-4 bg-racing-dark/80 p-5 rounded-2xl border border-racing-border backdrop-blur-md">
+                    <div class="text-center p-3">
+                        <span id="stat-drivers-count" class="block text-3xl font-extrabold text-racing-red font-racing">0</span>
+                        <span class="text-xs text-slate-400 font-semibold uppercase">Piloti</span>
+                    </div>
+                    <div class="text-center p-3 border-x border-racing-border">
+                        <span id="stat-sponsors-count" class="block text-3xl font-extrabold text-racing-gold font-racing">0</span>
+                        <span class="text-xs text-slate-400 font-semibold uppercase">Sponsor</span>
+                    </div>
+                    <div class="text-center p-3">
+                        <span id="stat-teams-count" class="block text-3xl font-extrabold text-white font-racing">0</span>
+                        <span class="text-xs text-slate-400 font-semibold uppercase">Team</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3 Columns Intro Cards -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Driver Box -->
+                <div class="bg-racing-card p-6 rounded-2xl border border-racing-border hover:border-racing-red transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-racing-red/10 border border-racing-red/30 flex items-center justify-center text-racing-red text-xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-helmet-safety"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Sei un Pilota?</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">Crea il tuo profilo anche se hai appena iniziato. Mostra la tua categoria, i risultati ottenuti e il tipo di supporto finanziario o tecnico di cui hai bisogno.</p>
+                    <button onclick="switchPage('drivers')" class="text-racing-red hover:underline font-bold text-xs flex items-center space-x-1">
+                        <span>Vai a Piloti Zone</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Sponsor Box -->
+                <div class="bg-racing-card p-6 rounded-2xl border border-racing-border hover:border-racing-gold transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-racing-gold/10 border border-racing-gold/30 flex items-center justify-center text-racing-gold text-xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Sei uno Sponsor?</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">Pubblica la tua scheda e specifica il contributo che puoi offrire: budget finanziario, abbigliamento, fornitura gomme, lubrificanti o ricambi.</p>
+                    <button onclick="switchPage('sponsors')" class="text-racing-gold hover:underline font-bold text-xs flex items-center space-x-1">
+                        <span>Vai a Sponsor Hub</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Team Box -->
+                <div class="bg-racing-card p-6 rounded-2xl border border-racing-border hover:border-white transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-white/10 border border-white/30 flex items-center justify-center text-white text-xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-users-gear"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Gestisci un Team?</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">Presenta la tua scuderia, i servizi in pista (telemetria, coaching, hospitality) e trova piloti motivati per completare la tua line-up.</p>
+                    <button onclick="switchPage('teams')" class="text-slate-200 hover:underline font-bold text-xs flex items-center space-x-1">
+                        <span>Vai a Team Finder</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Drivers -->
+        <div id="page-drivers" class="page-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-racing-card p-6 rounded-2xl border border-racing-border">
+                <div>
+                    <div class="flex items-center space-x-3">
+                        <h2 class="text-2xl font-bold text-white">Piloti Zone</h2>
+                        <span id="drivers-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-racing-red/20 border border-racing-red/40 text-racing-red">0 Piloti</span>
+                    </div>
+                    <p class="text-slate-400 text-xs mt-1">Trova talenti del karting o promuovi il tuo profilo agonistico</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <input type="text" id="driver-search" oninput="filterDrivers()" placeholder="Cerca pilota..." class="bg-racing-dark border border-racing-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-racing-red">
+                    <select id="driver-filter-category" onchange="filterDrivers()" class="bg-racing-dark border border-racing-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-racing-red">
+                        <option value="">Tutte le Categorie</option>
+                        <option value="MINI / Baby">MINI / Baby</option>
+                        <option value="OK-N / OK-NJ">OK-N / OK-NJ</option>
+                        <option value="KZ2 / Marce">KZ2 / Marce</option>
+                        <option value="ROTAX MAX">ROTAX MAX</option>
+                        <option value="KGP / Amatoriale">KGP / Amatoriale</option>
+                    </select>
+                    <button onclick="openRegistrationModal('driver')" class="px-4 py-2 rounded-xl bg-racing-red hover:bg-racing-redhover text-white font-bold text-xs shadow-md transition-all">
+                        + Nuovo Pilota
+                    </button>
+                </div>
+            </div>
+            <div id="drivers-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- Page Sponsors -->
+        <div id="page-sponsors" class="page-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-racing-card p-6 rounded-2xl border border-racing-border">
+                <div>
+                    <div class="flex items-center space-x-3">
+                        <h2 class="text-2xl font-bold text-white">Sponsor Hub</h2>
+                        <span id="sponsors-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-racing-gold/20 border border-racing-gold/40 text-racing-gold">0 Sponsor</span>
+                    </div>
+                    <p class="text-slate-400 text-xs mt-1">Aziende e brand che offrono finanziamenti o fornitura tecnica</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <input type="text" id="sponsor-search" oninput="filterSponsors()" placeholder="Cerca sponsor..." class="bg-racing-dark border border-racing-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-racing-gold">
+                    <select id="sponsor-filter-type" onchange="filterSponsors()" class="bg-racing-dark border border-racing-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-racing-gold">
+                        <option value="">Tutti i Tipi di Supporto</option>
+                        <option value="Materiale Tecnico / Ricambi">Materiale Tecnico / Ricambi</option>
+                        <option value="Abbigliamento & Tute">Abbigliamento & Tute</option>
+                        <option value="Sponsorizzazione Finanziaria">Sponsorizzazione Finanziaria</option>
+                    </select>
+                    <button onclick="openRegistrationModal('sponsor')" class="px-4 py-2 rounded-xl bg-racing-gold text-racing-dark hover:bg-yellow-400 font-bold text-xs shadow-md transition-all">
+                        + Nuovo Sponsor
+                    </button>
+                </div>
+            </div>
+            <div id="sponsors-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- Page Teams -->
+        <div id="page-teams" class="page-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-racing-card p-6 rounded-2xl border border-racing-border">
+                <div>
+                    <div class="flex items-center space-x-3">
+                        <h2 class="text-2xl font-bold text-white">Team Finder</h2>
+                        <span id="teams-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-700 text-white">0 Team</span>
+                    </div>
+                    <p class="text-slate-400 text-xs mt-1">Scuderie di karting alla ricerca di piloti per la stagione</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <input type="text" id="team-search" oninput="filterTeams()" placeholder="Cerca team o circuito..." class="bg-racing-dark border border-racing-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-racing-red">
+                    <button onclick="openRegistrationModal('team')" class="px-4 py-2 rounded-xl bg-racing-red hover:bg-racing-redhover text-white font-bold text-xs shadow-md transition-all">
+                        + Registra Scuderia
+                    </button>
+                </div>
+            </div>
+            <div id="teams-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- Page Chat / Messaging System -->
+        <div id="page-chat" class="page-content hidden space-y-6">
+            <div class="bg-racing-card p-6 rounded-2xl border border-racing-border flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-comments text-racing-red"></i>
+                        <span>Centro Messaggi & Chat</span>
+                    </h2>
+                    <p class="text-slate-400 text-xs mt-1">Mettiti in contatto diretto con piloti, sponsor e team della community</p>
+                </div>
+                <div class="flex items-center space-x-2 bg-racing-dark p-2 rounded-xl border border-racing-border text-xs">
+                    <span class="text-slate-400 font-semibold px-2">Identità mittente:</span>
+                    <input type="text" id="chat-sender-name" value="Utente KartLink" placeholder="Il tuo nome..." class="bg-racing-card border border-racing-border text-white text-xs px-3 py-1.5 rounded-lg focus:outline-none focus:border-racing-red w-40 sm:w-48">
+                </div>
+            </div>
+
+            <!-- Chat Interface Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+                <!-- Contacts List Panel -->
+                <div class="bg-racing-card border border-racing-border rounded-2xl flex flex-col overflow-hidden h-full">
+                    <div class="p-4 border-b border-racing-border bg-racing-dark/60">
+                        <div class="relative">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-500 text-xs"></i>
+                            <input type="text" id="chat-contact-search" oninput="renderChatContacts()" placeholder="Cerca profilo da contattare..." class="w-full pl-9 pr-3 py-2 bg-racing-dark border border-racing-border rounded-xl text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                    </div>
+                    <div id="chat-contacts-list" class="flex-1 overflow-y-auto divide-y divide-racing-border/40 p-2 space-y-1">
+                        <!-- Contacts dynamically rendered -->
+                    </div>
+                </div>
+
+                <!-- Active Conversation Window -->
+                <div class="lg:col-span-2 bg-racing-card border border-racing-border rounded-2xl flex flex-col overflow-hidden h-full">
+                    <!-- Recipient Header -->
+                    <div id="chat-header" class="p-4 bg-racing-dark border-b border-racing-border flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div id="chat-recipient-avatar" class="w-10 h-10 rounded-xl bg-racing-red flex items-center justify-center text-white font-bold text-sm">
+                                ?
+                            </div>
+                            <div>
+                                <h3 id="chat-recipient-name" class="font-bold text-white text-base">Seleziona una conversazione</h3>
+                                <span id="chat-recipient-type" class="text-xs text-slate-400">Scegli un profilo dalla lista a sinistra per iniziare a chattare</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messages Thread -->
+                    <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto space-y-3 bg-racing-dark/30">
+                        <div class="h-full flex flex-col items-center justify-center text-center p-6 text-slate-500">
+                            <i class="fa-solid fa-paper-plane text-4xl mb-3 text-slate-600"></i>
+                            <p class="text-sm font-semibold text-slate-300">Nessuna conversazione selezionata</p>
+                            <p class="text-xs text-slate-500 mt-1">Fai clic su un pilota, sponsor o team nella lista o dal loro profilo per inviare un messaggio.</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Reply Bar & Message Input -->
+                    <div id="chat-input-area" class="p-3 bg-racing-dark border-t border-racing-border space-y-2 opacity-50 pointer-events-none transition-all">
+                        <!-- Fast preset options -->
+                        <div class="flex items-center space-x-2 overflow-x-auto pb-1 text-[11px]">
+                            <span class="text-slate-500 font-medium whitespace-nowrap">Risposte rapide:</span>
+                            <button onclick="insertQuickMessage('Ciao! Ho visto il tuo profilo e sarei interessato a una collaborazione.')" class="bg-racing-card border border-racing-border hover:border-racing-red text-slate-300 px-2.5 py-1 rounded-lg whitespace-nowrap transition-colors">👋 Proposta Collaborazione</button>
+                            <button onclick="insertQuickMessage('Buongiorno, vorrei maggiori dettagli sul supporto disponibile per la nuova stagione.')" class="bg-racing-card border border-racing-border hover:border-racing-red text-slate-300 px-2.5 py-1 rounded-lg whitespace-nowrap transition-colors">ℹ️ Info Stagione</button>
+                            <button onclick="insertQuickMessage('Possiamo fissare una chiamata o un incontro direttamente in pista?')" class="bg-racing-card border border-racing-border hover:border-racing-red text-slate-300 px-2.5 py-1 rounded-lg whitespace-nowrap transition-colors">🏁 Incontro in pista</button>
+                        </div>
+
+                        <form onsubmit="handleSendMessage(event)" class="flex items-center space-x-2">
+                            <input type="text" id="chat-message-input" placeholder="Scrivi un messaggio..." class="flex-1 bg-racing-card border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                            <button type="submit" class="px-5 py-2.5 bg-racing-red hover:bg-racing-redhover text-white font-bold text-xs rounded-xl transition-all shadow-lg shadow-racing-red/20 flex items-center space-x-1.5">
+                                <span>Invia</span>
+                                <i class="fa-solid fa-paper-plane text-xs"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Registration -->
+    <div id="modal-registration" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-racing-card border border-racing-border rounded-2xl w-full max-w-2xl my-8 overflow-hidden shadow-2xl relative">
+            <div class="flex items-center justify-between p-6 border-b border-racing-border bg-racing-dark">
+                <h3 class="text-xl font-bold text-white">Crea Nuovo Profilo</h3>
+                <button onclick="closeRegistrationModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Tab selector -->
+            <div class="grid grid-cols-3 p-2 bg-racing-dark/60 border-b border-racing-border gap-2">
+                <button id="tab-btn-driver" onclick="selectProfileType('driver')" class="py-2.5 rounded-lg font-semibold text-xs sm:text-sm transition-all text-white bg-racing-red shadow">
+                    <i class="fa-solid fa-helmet-safety mr-1.5"></i>Pilota
+                </button>
+                <button id="tab-btn-sponsor" onclick="selectProfileType('sponsor')" class="py-2.5 rounded-lg font-semibold text-xs sm:text-sm transition-all text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-handshake mr-1.5"></i>Sponsor
+                </button>
+                <button id="tab-btn-team" onclick="selectProfileType('team')" class="py-2.5 rounded-lg font-semibold text-xs sm:text-sm transition-all text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-users-gear mr-1.5"></i>Team
+                </button>
+            </div>
+
+            <div class="p-6">
+                <!-- Driver Form -->
+                <form id="form-driver" onsubmit="saveDriver(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Nome e Cognome *</label>
+                            <input type="text" id="driver-name" required placeholder="es. Marco Rossi" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Età *</label>
+                            <input type="number" id="driver-age" required min="5" max="80" placeholder="es. 16" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Categoria *</label>
+                            <select id="driver-category" required class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                                <option value="MINI / Baby">MINI / Baby (60cc)</option>
+                                <option value="OK-N / OK-NJ">OK-N / OK-NJ</option>
+                                <option value="KZ2 / Marce">KZ2 / Marce</option>
+                                <option value="ROTAX MAX">ROTAX MAX</option>
+                                <option value="KGP / Amatoriale">KGP / Amatoriale</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Anni di Esperienza *</label>
+                            <input type="number" id="driver-exp" required min="0" max="50" placeholder="es. 2 (anche 0 per esordienti)" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tipo di Supporto Cercato *</label>
+                        <input type="text" id="driver-support-needed" required placeholder="es. Sponsor Finanziario per Categoria o Fornitura Gomme" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Palmarès / Risultati Notabili</label>
+                        <input type="text" id="driver-trophies" placeholder="es. 2° Posto Campionato Regionale 2025" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Biografia e Presentazione *</label>
+                        <textarea id="driver-bio" required rows="3" placeholder="Racconta la tua storia, obiettivi e motivazione..." class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red"></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Social (Instagram/TikTok)</label>
+                            <input type="text" id="driver-social" placeholder="@tuo_username" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Email di Contatto *</label>
+                            <input type="email" id="driver-contact" required placeholder="tuaemail@dominio.it" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                    </div>
+                    <div class="pt-3 flex justify-end space-x-3">
+                        <button type="button" onclick="closeRegistrationModal()" class="px-4 py-2.5 rounded-xl border border-racing-border text-slate-300 text-xs font-semibold">Annulla</button>
+                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-racing-red hover:bg-racing-redhover text-white text-xs font-bold shadow-lg shadow-racing-red/30">Pubblica Profilo Pilota</button>
+                    </div>
+                </form>
+
+                <!-- Sponsor Form -->
+                <form id="form-sponsor" onsubmit="saveSponsor(event)" class="space-y-4 hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Nome Azienda / Brand *</label>
+                            <input type="text" id="sponsor-name" required placeholder="es. Racing Parts Srl" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-gold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Settore Industriale *</label>
+                            <input type="text" id="sponsor-industry" required placeholder="es. Abbigliamento, Lubrificanti, Tech..." class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-gold">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Tipo di Contributo *</label>
+                            <select id="sponsor-type" required class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-gold">
+                                <option value="Materiale Tecnico / Ricambi">Materiale Tecnico / Ricambi</option>
+                                <option value="Abbigliamento & Tute">Abbigliamento & Tute</option>
+                                <option value="Sponsorizzazione Finanziaria">Sponsorizzazione Finanziaria</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Budget o Dettaglio Fornitura</label>
+                            <input type="text" id="sponsor-budget" placeholder="es. Fornitura olio + fino a 2.000€" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-gold">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Descrizione Opportunità & Requisiti *</label>
+                        <textarea id="sponsor-desc" required rows="3" placeholder="Descrivi cosa offrite e quali requisiti cercate nei piloti..." class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-gold"></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Sito Web</label>
+                            <input type="text" id="sponsor-website" placeholder="www.azienda.it" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-gold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Email Referente *</label>
+                            <input type="email" id="sponsor-contact" required placeholder="sponsor@azienda.it" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-gold">
+                        </div>
+                    </div>
+                    <div class="pt-3 flex justify-end space-x-3">
+                        <button type="button" onclick="closeRegistrationModal()" class="px-4 py-2.5 rounded-xl border border-racing-border text-slate-300 text-xs font-semibold">Annulla</button>
+                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-racing-gold text-racing-dark font-bold text-xs shadow-lg">Pubblica Scheda Sponsor</button>
+                    </div>
+                </form>
+
+                <!-- Team Form -->
+                <form id="form-team" onsubmit="saveTeam(event)" class="space-y-4 hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Nome Scuderia / Team *</label>
+                            <input type="text" id="team-name" required placeholder="es. Apex Speed Team" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Sede / Circuito Base *</label>
+                            <input type="text" id="team-location" required placeholder="es. Lonato BS / Circuito Franciacorta" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Categorie Gestite *</label>
+                        <input type="text" id="team-categories" required placeholder="es. MINI 60, OK-N, KZ2" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Servizi Offerti in Pista *</label>
+                        <input type="text" id="team-services" required placeholder="es. Assistenza gara, Telemetria, Tenda Paddock, Coaching" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Requisiti & Piloti Cercati *</label>
+                        <textarea id="team-requirements" required rows="3" placeholder="Descrivi il profilo di pilota che cercate per la stagione..." class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red"></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Sito Web / Social</label>
+                            <input type="text" id="team-website" placeholder="www.team.it" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Email Contatto *</label>
+                            <input type="email" id="team-contact" required placeholder="info@team.it" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-racing-red">
+                        </div>
+                    </div>
+                    <div class="pt-3 flex justify-end space-x-3">
+                        <button type="button" onclick="closeRegistrationModal()" class="px-4 py-2.5 rounded-xl border border-racing-border text-slate-300 text-xs font-semibold">Annulla</button>
+                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-racing-red hover:bg-racing-redhover text-white text-xs font-bold shadow-lg shadow-racing-red/30">Registra Team</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login Admin -->
+    <div id="modal-admin-login" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-racing-card border border-racing-border rounded-2xl w-full max-w-md overflow-hidden shadow-2xl p-6 relative">
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-racing-border">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-racing-red/10 border border-racing-red/30 flex items-center justify-center text-racing-red text-xl">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Accesso Riservato Admin</h3>
+                </div>
+                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Inserisci la Password Amministratore</label>
+                    <input type="password" id="admin-password-input" required placeholder="Password (predefinita: admin123)" class="w-full bg-racing-dark border border-racing-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-racing-red">
+                    <p class="text-[11px] text-slate-400 mt-1.5"><i class="fa-solid fa-circle-info mr-1"></i>Password predefinita: <strong class="text-white">admin123</strong></p>
+                </div>
+                <div id="admin-login-error" class="hidden text-xs text-racing-red font-semibold bg-racing-red/10 p-2.5 rounded-lg border border-racing-red/30">
+                    Password errata! Riprova.
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeAdminModal()" class="px-4 py-2.5 rounded-lg border border-racing-border text-slate-300 hover:bg-racing-dark text-xs font-semibold">Annulla</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-lg bg-racing-red hover:bg-racing-redhover text-white text-xs font-bold shadow-lg shadow-racing-red/30">Sblocca Permessi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-detail" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-racing-card border border-racing-border rounded-2xl w-full max-w-2xl my-8 overflow-hidden shadow-2xl relative">
+            <div id="detail-modal-content">
+                <!-- Dynamically filled with JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-racing-card border-l-4 border-racing-red text-white px-5 py-4 rounded-xl shadow-2xl flex items-center space-x-3 border border-racing-border">
+            <i class="fa-solid fa-circle-check text-racing-red text-xl"></i>
+            <span id="toast-message" class="text-sm font-medium">Operazione completata con successo!</span>
+        </div>
+    </div>
+
+    <script>
+        // --- INITIAL DATA & LOCALSTORAGE LOGIC ---
+        const initialDrivers = [
+            {
+                id: 'd1',
+                name: 'Matteo Viganò',
+                age: 15,
+                category: 'OK-N / OK-NJ',
+                exp: 3,
+                supportNeeded: 'Sponsor Finanziario per Categoria',
+                trophies: '2° Posto Campionato Regionale Lombardia 2025, Top 10 WSK',
+                bio: 'Pilota fortemente determinato con la passione per il motorsport sin da bambino. Sto cercando partner finanziari per affrontare la stagione completa OK-N National.',
+                social: '@matteo_racing15',
+                contact: 'matteo.racing@email.it',
+                date: '2026-01-10'
+            },
+            {
+                id: 'd2',
+                name: 'Sofia Lombardi',
+                age: 11,
+                category: 'MINI / Baby',
+                exp: 2,
+                supportNeeded: 'Materiale Tecnico / Gomme',
+                trophies: '1° Classificato Trofeo Autunno MINI 60',
+                bio: 'Giovane promessa del karting. Ho iniziato a 8 anni e sono costantemente nei primi posti del mio trofeo regionale. Cerco aziende per fornitura ricambi e gomme.',
+                social: '@sofia_kart_official',
+                contact: 'famiglia.lombardi@email.it',
+                date: '2026-02-01'
+            },
+            {
+                id: 'd3',
+                name: 'Alessandro De Luca',
+                age: 21,
+                category: 'KZ2 / Marce',
+                exp: 7,
+                supportNeeded: 'Ingaggio da parte di un Team',
+                trophies: 'Vincitore Trofeo delle Industrie KZ2 2024',
+                bio: 'Pilota esperto KZ2 con ottima conoscenza della telemetria e assetto. Valuto proposte da team strutturati per campionati nazionali ed internazionali.',
+                social: '@alex_deluca_kz',
+                contact: 'alex.deluca.racing@gmail.com',
+                date: '2026-02-15'
+            }
+        ];
+
+        const initialSponsors = [
+            {
+                id: 's1',
+                name: 'Apex Race Lubes',
+                industry: 'Lubrificanti Motorsport',
+                type: 'Materiale Tecnico / Ricambi',
+                budget: 'Fornitura olio/prodotti + fino a 1.500€',
+                desc: 'Produttori di olio sintetico ad alte prestazioni per motori da kart 2T. Offriamo fornitura tecnica completa e incentivi economico-premio in base ai podi.',
+                website: 'www.apexlubes.com',
+                contact: 'sponsorship@apexlubes.com',
+                date: '2026-01-05'
+            },
+            {
+                id: 's2',
+                name: 'FastGrip Racing Gear',
+                industry: 'Abbigliamento Tecnico',
+                type: 'Abbigliamento & Tute',
+                budget: 'Tute omologate FIA + Sconto 40%',
+                desc: 'Azienda specializzata in guanti, scarpe e tute personalizzate per piloti di karting. Selezioniamo 5 giovani piloti per la stagione corrente.',
+                website: 'www.fastgripracing.it',
+                contact: 'partner@fastgripracing.it',
+                date: '2026-01-20'
+            }
+        ];
+
+        const initialTeams = [
+            {
+                id: 't1',
+                name: 'RedLine Performance Team',
+                location: 'South Garda Karting (Lonato BS)',
+                categories: 'MINI, OK-N, KZ2',
+                services: 'Assistenza gara, Telemetria Unipro/Alfano, Tenda 12x6m, Noleggio Motori',
+                requirements: 'Ricerchiamo piloti per completare la line-up del Campionato Italiano OK-N e KZ2. Richiesta la massima serietà e impegno nei test.',
+                website: 'www.redlineperformance.it',
+                contact: 'teammanager@redlineperformance.it',
+                date: '2026-01-12'
+            },
+            {
+                id: 't2',
+                name: 'Brixia Kart Academy',
+                location: 'Circuito Franciacorta (BS)',
+                categories: 'MINI 60, ROTAX MAX',
+                services: 'Coaching per principianti, Telemetria video, Noleggio kart pronto gara',
+                requirements: 'Siamo focalizzati sui giovani piloti alle prime armi che vogliono imparare la traiettoria e le tecniche di gara con un tutor dedicato.',
+                website: 'www.brixiakart.it',
+                contact: 'info@brixiakart.it',
+                date: '2026-02-05'
+            }
+        ];
+
+        const initialMessages = [
+            {
+                id: 'm1',
+                senderName: 'Apex Race Lubes',
+                recipientId: 'd1',
+                recipientName: 'Matteo Viganò',
+                text: 'Ciao Matteo! Abbiamo letto i tuoi ottimi risultati nel Campionato Regionale. Ti andrebbe di valutare una fornitura di olio e lubrificanti per la stagione?',
+                timestamp: '10:30'
+            },
+            {
+                id: 'm2',
+                senderName: 'Matteo Viganò',
+                recipientId: 'd1',
+                recipientName: 'Apex Race Lubes',
+                text: 'Buongiorno! Sarei felice di parlarne. Che tipo di supporto tecnico potete offrire?',
+                timestamp: '10:35'
+            }
+        ];
+
+        // State variables
+        let drivers = [];
+        let sponsors = [];
+        let teams = [];
+        let messages = [];
+        let activeChatRecipient = null;
+        let currentModalProfileType = 'driver';
+        let isAdmin = false;
+        let editingMessageId = null;
+        const ADMIN_PASSWORD = "admin123";
+
+        // --- APP INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            updateStatsCounters();
+            renderDrivers();
+            renderSponsors();
+            renderTeams();
+            renderChatContacts();
+        });
+
+        function loadData() {
+            const storedDrivers = localStorage.getItem('kartlink_drivers');
+            const storedSponsors = localStorage.getItem('kartlink_sponsors');
+            const storedTeams = localStorage.getItem('kartlink_teams');
+            const storedMessages = localStorage.getItem('kartlink_messages');
+
+            drivers = storedDrivers ? JSON.parse(storedDrivers) : initialDrivers;
+            sponsors = storedSponsors ? JSON.parse(storedSponsors) : initialSponsors;
+            teams = storedTeams ? JSON.parse(storedTeams) : initialTeams;
+            messages = storedMessages ? JSON.parse(storedMessages) : initialMessages;
+
+            if (!storedDrivers) localStorage.setItem('kartlink_drivers', JSON.stringify(drivers));
+            if (!storedSponsors) localStorage.setItem('kartlink_sponsors', JSON.stringify(sponsors));
+            if (!storedTeams) localStorage.setItem('kartlink_teams', JSON.stringify(teams));
+            if (!storedMessages) localStorage.setItem('kartlink_messages', JSON.stringify(messages));
+        }
+
+        function switchPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show target page
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update Nav styling
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-racing-red', 'bg-racing-card', 'border', 'border-racing-border');
+                btn.classList.add('text-slate-300');
+            });
+
+            const activeNav = document.getElementById(`nav-${pageId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-300');
+                activeNav.classList.add('text-racing-red', 'bg-racing-card', 'border', 'border-racing-border');
+            }
+
+            if (pageId === 'chat') {
+                renderChatContacts();
+                if (activeChatRecipient) {
+                    renderChatThread();
+                }
+            }
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function updateStatsCounters() {
+            const driversEl = document.getElementById('stat-drivers-count');
+            const sponsorsEl = document.getElementById('stat-sponsors-count');
+            const teamsEl = document.getElementById('stat-teams-count');
+
+            if (driversEl) driversEl.innerText = drivers.length;
+            if (sponsorsEl) sponsorsEl.innerText = sponsors.length;
+            if (teamsEl) teamsEl.innerText = teams.length;
+        }
+
+        function renderDrivers(filteredList = null) {
+            const list = filteredList || drivers;
+            const grid = document.getElementById('drivers-grid');
+            document.getElementById('drivers-count-badge').innerText = `${list.length} Piloti`;
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-racing-card rounded-2xl border border-racing-border">
+                        <i class="fa-solid fa-helmet-safety text-4xl text-slate-600 mb-3"></i>
+                        <p class="text-lg font-semibold text-white">Nessun pilota trovato</p>
+                        <p class="text-sm text-slate-400 mt-1">Sii il primo a creare un profilo pilota per questa categoria!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = list.map(d => `
+                <div class="bg-racing-card rounded-2xl border ${isAdmin ? 'border-racing-red/60' : 'border-racing-border'} overflow-hidden transition-all duration-300 glow-card flex flex-col justify-between relative">
+                    ${isAdmin ? `
+                        <div class="bg-racing-red text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 text-center flex justify-between items-center">
+                            <span><i class="fa-solid fa-user-shield mr-1"></i>Modalità Admin</span>
+                            <button onclick="confirmDelete('driver', '${d.id}', '${d.name.replace(/'/g, "\\'")}')" class="text-white hover:underline font-extrabold flex items-center space-x-1">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>Elimina</span>
+                            </button>
+                        </div>
+                    ` : ''}
+                    <div class="p-6">
+                        <!-- Top header -->
+                        <div class="flex items-start justify-between gap-3 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-racing-red to-orange-600 flex items-center justify-center text-white font-extrabold text-lg shadow-md">
+                                    ${d.name.split(' ').map(n => n[0]).join('')}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-white leading-tight">${d.name}</h3>
+                                    <span class="text-xs text-slate-400">${d.age} Anni &bull; ${d.exp} anni exp</span>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-racing-dark border border-racing-border text-racing-red">
+                                ${d.category}
+                            </span>
+                        </div>
+
+                        <!-- Info details -->
+                        <div class="space-y-3 text-xs mb-4">
+                            <div class="bg-racing-dark/60 p-2.5 rounded-lg border border-racing-border/50">
+                                <span class="text-slate-400 font-medium block mb-0.5">Cerca:</span>
+                                <span class="text-slate-200 font-semibold">${d.supportNeeded}</span>
+                            </div>
+
+                            ${d.trophies ? `
+                                <div>
+                                    <span class="text-slate-400 font-medium"><i class="fa-solid fa-trophy text-racing-gold mr-1"></i> Risultati:</span>
+                                    <p class="text-slate-300 font-medium truncate">${d.trophies}</p>
+                                </div>
+                            ` : ''}
+
+                            <p class="text-slate-400 text-xs line-clamp-3 leading-relaxed mt-2">${d.bio}</p>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer Action -->
+                    <div class="p-4 bg-racing-dark/80 border-t border-racing-border flex items-center justify-between">
+                        <span class="text-xs text-slate-400"><i class="fa-brands fa-instagram text-racing-red mr-1"></i>${d.social || 'N/A'}</span>
+                        <div class="flex space-x-2">
+                            ${isAdmin ? `
+                                <button onclick="confirmDelete('driver', '${d.id}', '${d.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-racing-red/20 border border-racing-red text-racing-red hover:bg-racing-red hover:text-white font-semibold text-xs transition-all">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            ` : ''}
+                            <button onclick="startChatWith('driver', '${d.id}', '${d.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-racing-card border border-racing-border hover:border-racing-red text-slate-300 hover:text-white font-semibold text-xs transition-all" title="Invia Messaggio">
+                                <i class="fa-solid fa-comments text-racing-red"></i>
+                            </button>
+                            <button onclick="openDriverDetail('${d.id}')" class="px-3.5 py-1.5 rounded-lg bg-racing-red/10 border border-racing-red/30 text-racing-red hover:bg-racing-red hover:text-white font-semibold text-xs transition-all">
+                                Vedi Profilo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterDrivers() {
+            const query = document.getElementById('driver-search').value.toLowerCase();
+            const category = document.getElementById('driver-filter-category').value;
+
+            const filtered = drivers.filter(d => {
+                const matchesQuery = d.name.toLowerCase().includes(query) || d.bio.toLowerCase().includes(query);
+                const matchesCategory = category === '' || d.category === category;
+                return matchesQuery && matchesCategory;
+            });
+
+            renderDrivers(filtered);
+        }
+
+        function renderSponsors(filteredList = null) {
+            const list = filteredList || sponsors;
+            const grid = document.getElementById('sponsors-grid');
+            document.getElementById('sponsors-count-badge').innerText = `${list.length} Sponsor`;
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-racing-card rounded-2xl border border-racing-border">
+                        <i class="fa-solid fa-handshake text-4xl text-slate-600 mb-3"></i>
+                        <p class="text-lg font-semibold text-white">Nessun sponsor trovato</p>
+                        <p class="text-sm text-slate-400 mt-1">Controlla i filtri applicati o pubblica un'offerta di sponsorizzazione!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = list.map(s => `
+                <div class="bg-racing-card rounded-2xl border ${isAdmin ? 'border-racing-red/60' : 'border-racing-border'} overflow-hidden transition-all duration-300 glow-card flex flex-col justify-between relative">
+                    ${isAdmin ? `
+                        <div class="bg-racing-red text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 text-center flex justify-between items-center">
+                            <span><i class="fa-solid fa-user-shield mr-1"></i>Modalità Admin</span>
+                            <button onclick="confirmDelete('sponsor', '${s.id}', '${s.name.replace(/'/g, "\\'")}')" class="text-white hover:underline font-extrabold flex items-center space-x-1">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>Elimina</span>
+                            </button>
+                        </div>
+                    ` : ''}
+                    <div class="p-6">
+                        <div class="flex items-start justify-between gap-3 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-racing-dark border border-racing-border flex items-center justify-center text-racing-red text-xl font-bold">
+                                    <i class="fa-solid fa-building"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-white leading-tight">${s.name}</h3>
+                                    <span class="text-xs text-racing-red font-semibold">${s.industry}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 text-xs mb-4">
+                            <div class="bg-racing-dark/60 p-2.5 rounded-lg border border-racing-border/50">
+                                <span class="text-slate-400 font-medium block mb-0.5">Tipo Contributo:</span>
+                                <span class="text-slate-200 font-bold">${s.type}</span>
+                            </div>
+
+                            ${s.budget ? `
+                                <div>
+                                    <span class="text-slate-400 font-medium"><i class="fa-solid fa-coins text-racing-gold mr-1"></i> Budget/Fornitura:</span>
+                                    <p class="text-slate-300 font-medium">${s.budget}</p>
+                                </div>
+                            ` : ''}
+
+                            <p class="text-slate-400 text-xs line-clamp-3 leading-relaxed mt-2">${s.desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-racing-dark/80 border-t border-racing-border flex items-center justify-between">
+                        <span class="text-xs text-slate-400 truncate max-w-[150px]"><i class="fa-solid fa-globe mr-1"></i>${s.website || 'N/A'}</span>
+                        <div class="flex space-x-2">
+                            ${isAdmin ? `
+                                <button onclick="confirmDelete('sponsor', '${s.id}', '${s.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-racing-red/20 border border-racing-red text-racing-red hover:bg-racing-red hover:text-white font-semibold text-xs transition-all">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            ` : ''}
+                            <button onclick="startChatWith('sponsor', '${s.id}', '${s.name.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 rounded-lg bg-racing-gold text-racing-dark hover:bg-yellow-400 font-bold text-xs transition-all shadow-md flex items-center space-x-1">
+                                <i class="fa-solid fa-comments"></i>
+                                <span>Chatta</span>
+                            </button>
+                            <button onclick="openSponsorDetail('${s.id}')" class="px-3.5 py-1.5 rounded-lg bg-racing-red text-white hover:bg-racing-redhover font-semibold text-xs transition-all shadow-md">
+                                Dettagli
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterSponsors() {
+            const query = document.getElementById('sponsor-search').value.toLowerCase();
+            const type = document.getElementById('sponsor-filter-type').value;
+
+            const filtered = sponsors.filter(s => {
+                const matchesQuery = s.name.toLowerCase().includes(query) || s.industry.toLowerCase().includes(query);
+                const matchesType = type === '' || s.type === type;
+                return matchesQuery && matchesType;
+            });
+
+            renderSponsors(filtered);
+        }
+
+        function renderTeams(filteredList = null) {
+            const list = filteredList || teams;
+            const grid = document.getElementById('teams-grid');
+            document.getElementById('teams-count-badge').innerText = `${list.length} Team Registrati`;
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-racing-card rounded-2xl border border-racing-border">
+                        <i class="fa-solid fa-users-gear text-4xl text-slate-600 mb-3"></i>
+                        <p class="text-lg font-semibold text-white">Nessun team trovato</p>
+                        <p class="text-sm text-slate-400 mt-1">Registra la tua scuderia o modifica la ricerca.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = list.map(t => `
+                <div class="bg-racing-card rounded-2xl border ${isAdmin ? 'border-racing-red/60' : 'border-racing-border'} overflow-hidden transition-all duration-300 glow-card flex flex-col justify-between relative">
+                    ${isAdmin ? `
+                        <div class="bg-racing-red text-white text-[10px] font-bold uppercase tracking-wider px-3 py-0.5 text-center flex justify-between items-center">
+                            <span><i class="fa-solid fa-user-shield mr-1"></i>Modalità Admin</span>
+                            <button onclick="confirmDelete('team', '${t.id}', '${t.name.replace(/'/g, "\\'")}')" class="text-white hover:underline font-extrabold flex items-center space-x-1">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>Elimina</span>
+                            </button>
+                        </div>
+                    ` : ''}
+                    <div class="p-6">
+                        <div class="flex items-start justify-between gap-3 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-racing-red/10 border border-racing-red/30 flex items-center justify-center text-racing-red text-xl font-bold">
+                                    <i class="fa-solid fa-flag-checkered"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-white leading-tight">${t.name}</h3>
+                                    <span class="text-xs text-slate-400"><i class="fa-solid fa-location-dot text-racing-red mr-1"></i>${t.location}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 text-xs mb-4">
+                            <div class="bg-racing-dark/60 p-2.5 rounded-lg border border-racing-border/50">
+                                <span class="text-slate-400 font-medium block mb-0.5">Categorie Presenti:</span>
+                                <span class="text-racing-red font-bold">${t.categories}</span>
+                            </div>
+
+                            <div>
+                                <span class="text-slate-400 font-medium"><i class="fa-solid fa-wrench mr-1"></i> Servizi Offerti:</span>
+                                <p class="text-slate-300 font-medium mt-0.5 line-clamp-2">${t.services}</p>
+                            </div>
+
+                            <div class="mt-2 pt-2 border-t border-racing-border/40">
+                                <span class="text-slate-400 font-medium block mb-0.5">Requisiti / Cercano:</span>
+                                <p class="text-slate-300 text-xs line-clamp-2 leading-relaxed">${t.requirements}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-racing-dark/80 border-t border-racing-border flex items-center justify-between">
+                        <span class="text-xs text-slate-400 truncate max-w-[150px]"><i class="fa-solid fa-envelope mr-1"></i>${t.contact}</span>
+                        <div class="flex space-x-2">
+                            ${isAdmin ? `
+                                <button onclick="confirmDelete('team', '${t.id}', '${t.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-racing-red/20 border border-racing-red text-racing-red hover:bg-racing-red hover:text-white font-semibold text-xs transition-all">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            ` : ''}
+                            <button onclick="startChatWith('team', '${t.id}', '${t.name.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-lg bg-racing-card border border-racing-border hover:border-racing-red text-slate-300 hover:text-white font-semibold text-xs transition-all flex items-center space-x-1">
+                                <i class="fa-solid fa-comments text-racing-red"></i>
+                                <span>Contatta</span>
+                            </button>
+                            <button onclick="openTeamDetail('${t.id}')" class="px-3.5 py-1.5 rounded-lg bg-racing-card border border-racing-border hover:bg-racing-border text-white font-semibold text-xs transition-all">
+                                Dettagli
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- CHAT INTERACTION LOGIC ---
+        function startChatWith(type, id, name) {
+            activeChatRecipient = { id, name, type };
+            switchPage('chat');
+            selectChatRecipient(id, name, type);
+        }
+
+        function renderChatContacts() {
+            const searchInput = document.getElementById('chat-contact-search');
+            const filter = searchInput ? searchInput.value.toLowerCase() : '';
+            const container = document.getElementById('chat-contacts-list');
+            if (!container) return;
+
+            // Build unified contacts list
+            const allContacts = [
+                ...drivers.map(d => ({ id: d.id, name: d.name, type: 'Pilota', badgeClass: 'bg-racing-red/20 text-racing-red border-racing-red/30', sub: d.category })),
+                ...sponsors.map(s => ({ id: s.id, name: s.name, type: 'Sponsor', badgeClass: 'bg-racing-gold/20 text-racing-gold border-racing-gold/30', sub: s.industry })),
+                ...teams.map(t => ({ id: t.id, name: t.name, type: 'Team', badgeClass: 'bg-slate-700 text-white border-slate-600', sub: t.location }))
+            ];
+
+            const filtered = allContacts.filter(c => c.name.toLowerCase().includes(filter) || c.sub.toLowerCase().includes(filter));
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Nessun contatto trovato.</p>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(c => {
+                const isActive = activeChatRecipient && activeChatRecipient.id === c.id;
+                const initials = c.name.split(' ').map(n => n[0]).join('').slice(0, 2);
+
+                return `
+                    <button onclick="selectChatRecipient('${c.id}', '${c.name.replace(/'/g, "\\'")}', '${c.type}')" class="w-full text-left p-3 rounded-xl transition-all flex items-center justify-between ${isActive ? 'bg-racing-red/20 border border-racing-red/50' : 'hover:bg-racing-dark border border-transparent'}">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-racing-dark border border-racing-border flex items-center justify-center font-bold text-xs text-white">
+                                ${initials}
+                            </div>
+                            <div class="overflow-hidden">
+                                <h4 class="font-bold text-xs text-white truncate">${c.name}</h4>
+                                <span class="text-[10px] text-slate-400 block truncate">${c.sub}</span>
+                            </div>
+                        </div>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full font-bold border ${c.badgeClass}">
+                            ${c.type}
+                        </span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectChatRecipient(id, name, type) {
+            activeChatRecipient = { id, name, type };
+            editingMessageId = null;
+            
+            // Enable chat input
+            const inputArea = document.getElementById('chat-input-area');
+            if (inputArea) {
+                inputArea.classList.remove('opacity-50', 'pointer-events-none');
+            }
+
+            // Update Header
+            const avatar = document.getElementById('chat-recipient-avatar');
+            const nameEl = document.getElementById('chat-recipient-name');
+            const typeEl = document.getElementById('chat-recipient-type');
+
+            if (avatar) avatar.innerText = name.split(' ').map(n => n[0]).join('').slice(0, 2);
+            if (nameEl) nameEl.innerText = name;
+            if (typeEl) typeEl.innerText = `Profilo ${type} • Messaggi Diretti`;
+
+            renderChatContacts();
+            renderChatThread();
+        }
+
+        function renderChatThread() {
+            const container = document.getElementById('chat-messages-container');
+            if (!container || !activeChatRecipient) return;
+
+            const relevantMessages = messages.filter(m => 
+                m.recipientId === activeChatRecipient.id || m.senderName === activeChatRecipient.name
+            );
+
+            if (relevantMessages.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center p-6 text-slate-500">
+                        <i class="fa-solid fa-comments text-3xl mb-2 text-racing-red/60"></i>
+                        <p class="text-xs font-semibold text-slate-300">Inizia la conversazione con ${activeChatRecipient.name}</p>
+                        <p class="text-[11px] text-slate-500 mt-1">Usa la barra qui sotto o le risposte rapide per inviare una proposta o richiesta info.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = relevantMessages.map(m => {
+                const isRecipient = m.senderName === activeChatRecipient.name;
+                const isEditing = editingMessageId === m.id;
+
+                if (isEditing) {
+                    return `
+                        <div class="flex flex-col ${isRecipient ? 'items-start' : 'items-end'} w-full">
+                            <span class="text-[10px] text-slate-400 mb-1 px-1">Modifica messaggio</span>
+                            <div class="max-w-[85%] w-full bg-racing-card border border-racing-red p-3 rounded-2xl shadow-xl space-y-2">
+                                <textarea id="edit-msg-input-${m.id}" rows="2" class="w-full bg-racing-dark border border-racing-border rounded-xl p-2 text-xs text-white focus:outline-none focus:border-racing-red resize-none">${m.text.replace(/"/g, '&quot;')}</textarea>
+                                <div class="flex justify-end space-x-2">
+                                    <button onclick="cancelEditMessage()" class="px-3 py-1 rounded-lg text-[11px] text-slate-400 hover:bg-racing-dark border border-racing-border transition-colors">Annulla</button>
+                                    <button onclick="saveEditMessage('${m.id}')" class="px-3 py-1 rounded-lg text-[11px] bg-racing-red text-white font-bold hover:bg-racing-redhover shadow-md transition-colors">Salva</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="flex flex-col ${isRecipient ? 'items-start' : 'items-end'} group">
+                        <div class="flex items-center space-x-2 ${isRecipient ? 'flex-row' : 'flex-row-reverse space-x-reverse'}">
+                            <span class="text-[10px] text-slate-400 mb-1 px-1">
+                                ${m.senderName} &bull; ${m.timestamp} ${m.isEdited ? '<span class="text-slate-500 italic">(modificato)</span>' : ''}
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-1.5 max-w-[85%] ${isRecipient ? 'flex-row' : 'flex-row-reverse'}">
+                            <div class="p-3 rounded-2xl text-xs leading-relaxed ${isRecipient ? 'bg-racing-card border border-racing-border text-slate-200 rounded-tl-none' : 'bg-racing-red text-white font-medium rounded-tr-none shadow-md'}">
+                                ${m.text}
+                            </div>
+                            ${!isRecipient || isAdmin ? `
+                                <div class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center space-x-1">
+                                    <button onclick="editMessage('${m.id}')" class="p-1.5 text-slate-400 hover:text-white hover:bg-racing-dark rounded-lg text-xs" title="Modifica messaggio">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button onclick="deleteMessage('${m.id}')" class="p-1.5 text-slate-400 hover:text-racing-red hover:bg-racing-dark rounded-lg text-xs" title="Elimina messaggio">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function editMessage(id) {
+            editingMessageId = id;
+            renderChatThread();
+        }
+
+        function cancelEditMessage() {
+            editingMessageId = null;
+            renderChatThread();
+        }
+
+        function saveEditMessage(id) {
+            const input = document.getElementById(`edit-msg-input-${id}`);
+            if (!input) return;
+            const newText = input.value.trim();
+            if (!newText) {
+                showToast("Il messaggio non può essere vuoto");
+                return;
+            }
+
+            const msg = messages.find(m => m.id === id);
+            if (msg) {
+                msg.text = newText;
+                msg.isEdited = true;
+                localStorage.setItem('kartlink_messages', JSON.stringify(messages));
+                showToast("Messaggio modificato con successo!");
+            }
+            editingMessageId = null;
+            renderChatThread();
+        }
+
+        function deleteMessage(id) {
+            messages = messages.filter(m => m.id !== id);
+            localStorage.setItem('kartlink_messages', JSON.stringify(messages));
+            showToast("Messaggio eliminato");
+            if (editingMessageId === id) editingMessageId = null;
+            renderChatThread();
+        }
+
+        function handleSendMessage(e) {
+            e.preventDefault();
+            if (!activeChatRecipient) {
+                showToast("Seleziona prima un destinatario!");
+                return;
+            }
+
+            const input = document.getElementById('chat-message-input');
+            const senderInput = document.getElementById('chat-sender-name');
+            const text = input ? input.value.trim() : '';
+            const senderName = (senderInput && senderInput.value.trim()) ? senderInput.value.trim() : 'Utente KartLink';
+
+            if (!text) return;
+
+            const now = new Date();
+            const timestamp = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+            const newMsg = {
+                id: 'm_' + Date.now(),
+                senderName: senderName,
+                recipientId: activeChatRecipient.id,
+                recipientName: activeChatRecipient.name,
+                text: text,
+                timestamp: timestamp
+            };
+
+            messages.push(newMsg);
+            localStorage.setItem('kartlink_messages', JSON.stringify(messages));
+
+            input.value = '';
+            renderChatThread();
+            showToast(`Messaggio inviato a ${activeChatRecipient.name}`);
+        }
+
+        function insertQuickMessage(text) {
+            const input = document.getElementById('chat-message-input');
+            if (input) {
+                input.value = text;
+                input.focus();
+            }
+        }
+
+        // Detail modals integration
+        function openDriverDetail(id) {
+            const d = drivers.find(item => item.id === id);
+            if (!d) return;
+
+            const modalContent = document.getElementById('detail-modal-content');
+            modalContent.innerHTML = `
+                <div class="bg-racing-dark p-6 border-b border-racing-border flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-racing-red flex items-center justify-center text-white font-bold text-base">
+                            ${d.name.split(' ').map(n => n[0]).join('')}
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">${d.name}</h3>
+                            <span class="text-xs text-racing-red font-semibold">${d.category}</span>
+                        </div>
+                    </div>
+                    <button onclick="closeDetailModal()" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
+                        <div class="bg-racing-dark p-3 rounded-xl border border-racing-border">
+                            <span class="text-xs text-slate-400 block">Età</span>
+                            <span class="text-base font-bold text-white">${d.age} Anni</span>
+                        </div>
+                        <div class="bg-racing-dark p-3 rounded-xl border border-racing-border">
+                            <span class="text-xs text-slate-400 block">Esperienza</span>
+                            <span class="text-base font-bold text-white">${d.exp} Anni</span>
+                        </div>
+                        <div class="bg-racing-dark p-3 rounded-xl border border-racing-border col-span-2 sm:col-span-1">
+                            <span class="text-xs text-slate-400 block">Social</span>
+                            <span class="text-xs font-bold text-racing-red">${d.social || 'N/A'}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Supporto Cercato</h4>
+                        <p class="text-sm font-semibold text-white bg-racing-dark p-3 rounded-xl border border-racing-border">${d.supportNeeded}</p>
+                    </div>
+
+                    ${d.trophies ? `
+                        <div>
+                            <h4 class="text-xs uppercase font-bold text-slate-400 mb-1"><i class="fa-solid fa-trophy text-racing-gold mr-1"></i> Palmarès & Risultati</h4>
+                            <p class="text-sm text-slate-200 bg-racing-dark p-3 rounded-xl border border-racing-border">${d.trophies}</p>
+                        </div>
+                    ` : ''}
+
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Biografia & Storia</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed bg-racing-dark p-3 rounded-xl border border-racing-border whitespace-pre-line">${d.bio}</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-racing-border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span class="text-xs text-slate-400">Contatto: <strong class="text-white">${d.contact}</strong></span>
+                        <button onclick="closeDetailModal(); startChatWith('driver', '${d.id}', '${d.name.replace(/'/g, "\\'")}')" class="w-full sm:w-auto px-6 py-2.5 bg-racing-red hover:bg-racing-redhover text-white text-xs font-bold rounded-xl text-center shadow-lg shadow-racing-red/30 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-comments"></i>
+                            <span>Chatta in Piattaforma</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-detail').classList.remove('hidden');
+        }
+
+        function openSponsorDetail(id) {
+            const s = sponsors.find(item => item.id === id);
+            if (!s) return;
+
+            const modalContent = document.getElementById('detail-modal-content');
+            modalContent.innerHTML = `
+                <div class="bg-racing-dark p-6 border-b border-racing-border flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-racing-dark border border-racing-border flex items-center justify-center text-racing-red font-bold text-base">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">${s.name}</h3>
+                            <span class="text-xs text-racing-red font-semibold">${s.industry}</span>
+                        </div>
+                    </div>
+                    <button onclick="closeDetailModal()" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <div class="bg-racing-dark p-4 rounded-xl border border-racing-border">
+                        <span class="text-xs text-slate-400 block mb-1">Tipologia Supporto Offerto</span>
+                        <span class="text-base font-bold text-white">${s.type}</span>
+                        ${s.budget ? `<p class="text-xs text-racing-gold font-semibold mt-1"><i class="fa-solid fa-coins mr-1"></i> Budget: ${s.budget}</p>` : ''}
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Descrizione Azienda & Opportunità</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed bg-racing-dark p-3 rounded-xl border border-racing-border whitespace-pre-line">${s.desc}</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-racing-border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span class="text-xs text-slate-400">Email Ref: <strong class="text-white">${s.contact}</strong></span>
+                        <button onclick="closeDetailModal(); startChatWith('sponsor', '${s.id}', '${s.name.replace(/'/g, "\\'")}')" class="w-full sm:w-auto px-6 py-2.5 bg-racing-gold text-racing-dark hover:bg-yellow-400 text-xs font-bold rounded-xl text-center shadow-lg flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-comments"></i>
+                            <span>Chatta con Sponsor</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-detail').classList.remove('hidden');
+        }
+
+        function openTeamDetail(id) {
+            const t = teams.find(item => item.id === id);
+            if (!t) return;
+
+            const modalContent = document.getElementById('detail-modal-content');
+            modalContent.innerHTML = `
+                <div class="bg-racing-dark p-6 border-b border-racing-border flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-racing-red/10 border border-racing-red/30 flex items-center justify-center text-racing-red font-bold text-base">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">${t.name}</h3>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-location-dot text-racing-red mr-1"></i>${t.location}</span>
+                        </div>
+                    </div>
+                    <button onclick="closeDetailModal()" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Categorie Attive</h4>
+                        <p class="text-sm font-bold text-racing-red bg-racing-dark p-3 rounded-xl border border-racing-border">${t.categories}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Servizi Offerti in Pista</h4>
+                        <p class="text-sm text-slate-200 bg-racing-dark p-3 rounded-xl border border-racing-border">${t.services}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Requisiti / Chi Stanno Cercando</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed bg-racing-dark p-3 rounded-xl border border-racing-border whitespace-pre-line">${t.requirements}</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-racing-border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span class="text-xs text-slate-400">Contatto Team: <strong class="text-white">${t.contact}</strong></span>
+                        <button onclick="closeDetailModal(); startChatWith('team', '${t.id}', '${t.name.replace(/'/g, "\\'")}')" class="w-full sm:w-auto px-6 py-2.5 bg-racing-red hover:bg-racing-redhover text-white text-xs font-bold rounded-xl text-center shadow-lg shadow-racing-red/30 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-comments"></i>
+                            <span>Chatta con Scuderia</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-detail').classList.remove('hidden');
+        }
+
+        function openSponsorDetail(id) {
+            const s = sponsors.find(item => item.id === id);
+            if (!s) return;
+
+            const modalContent = document.getElementById('detail-modal-content');
+            modalContent.innerHTML = `
+                <div class="bg-racing-dark p-6 border-b border-racing-border flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-racing-dark border border-racing-border flex items-center justify-center text-racing-red font-bold text-base">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">${s.name}</h3>
+                            <span class="text-xs text-racing-red font-semibold">${s.industry}</span>
+                        </div>
+                    </div>
+                    <button onclick="closeDetailModal()" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <div class="bg-racing-dark p-4 rounded-xl border border-racing-border">
+                        <span class="text-xs text-slate-400 block mb-1">Tipologia Supporto Offerto</span>
+                        <span class="text-base font-bold text-white">${s.type}</span>
+                        ${s.budget ? `<p class="text-xs text-racing-gold font-semibold mt-1"><i class="fa-solid fa-coins mr-1"></i> Budget: ${s.budget}</p>` : ''}
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Descrizione Azienda & Opportunità</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed bg-racing-dark p-3 rounded-xl border border-racing-border whitespace-pre-line">${s.desc}</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-racing-border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span class="text-xs text-slate-400">Email Ref: <strong class="text-white">${s.contact}</strong></span>
+                        <a href="mailto:${s.contact}" class="w-full sm:w-auto px-6 py-2.5 bg-racing-red hover:bg-racing-redhover text-white text-xs font-bold rounded-xl text-center shadow-lg shadow-racing-red/30">
+                            Candida Il Tuo Profilo
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-detail').classList.remove('hidden');
+        }
+
+        function openTeamDetail(id) {
+            const t = teams.find(item => item.id === id);
+            if (!t) return;
+
+            const modalContent = document.getElementById('detail-modal-content');
+            modalContent.innerHTML = `
+                <div class="bg-racing-dark p-6 border-b border-racing-border flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-racing-red/10 border border-racing-red/30 flex items-center justify-center text-racing-red font-bold text-base">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">${t.name}</h3>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-location-dot text-racing-red mr-1"></i>${t.location}</span>
+                        </div>
+                    </div>
+                    <button onclick="closeDetailModal()" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Categorie Attive</h4>
+                        <p class="text-sm font-bold text-racing-red bg-racing-dark p-3 rounded-xl border border-racing-border">${t.categories}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Servizi Offerti in Pista</h4>
+                        <p class="text-sm text-slate-200 bg-racing-dark p-3 rounded-xl border border-racing-border">${t.services}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-1">Requisiti / Chi Stanno Cercando</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed bg-racing-dark p-3 rounded-xl border border-racing-border whitespace-pre-line">${t.requirements}</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-racing-border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span class="text-xs text-slate-400">Contatto Team: <strong class="text-white">${t.contact}</strong></span>
+                        <a href="mailto:${t.contact}" class="w-full sm:w-auto px-6 py-2.5 bg-racing-red hover:bg-racing-redhover text-white text-xs font-bold rounded-xl text-center shadow-lg shadow-racing-red/30">
+                            Contatta Scuderia
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-detail').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('modal-detail').classList.add('hidden');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
